@@ -521,6 +521,7 @@ citasCtrl.createPorMediaHora = async (req, res) => {
                         })
                         await ocupadoB.save()
                         const subs = await Notificaciones.findOne({ administrador : req.body.estilista })
+                        console.log(subs)
             const playload = JSON.stringify({
                 title: `Tienes una nueva cita el dia ${date}`,        
             })

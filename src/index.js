@@ -33,7 +33,7 @@ app.use('/api/v1/notificaciones', require('./routes/notificaciones'))
 
 const io = socketIo(server, {
     cors: {
-      origin: ["https://salon-app-109a8.web.app", "https://salon-app-109a8.web.app/conexion"],
+      origin: ["https://salon-app-109a8.web.app", "https://salon-app-109a8.web.app/conexion", "http://localhost:3000"],
       methods: ["GET", "POST"],
       credentials: true
     }
@@ -42,6 +42,7 @@ const io = socketIo(server, {
 
 io.on('connection', socket => {
     console.log('Socket connected: ', socket.id)
+    io.emit('socketlisto', { conexion: true })
 })
 
 
