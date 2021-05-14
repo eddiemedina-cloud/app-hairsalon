@@ -118,17 +118,10 @@ app.post('/api/v1/conexion', async (req, res) => {
 })
 
 app.post('/api/v1/confirm', async ( req, res ) => {
-
-    try{
         await Citas.findOneAndUpdate({ _id: req.body.id }, {
             confirmacion : true
         })
-        res.json({ message : 200})
-    }catch(error){
-        res.json({ message : 404})
-    }
-
-    
+        res.json({ message : 200})  
 })
 
 
