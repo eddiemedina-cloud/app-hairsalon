@@ -4,7 +4,6 @@ require('dotenv').config()
 const express = require('express')
 const port = (process.env.PORT || 4000)
 const cors = require('cors')
-const socketIo = require('socket.io')
 const { Client } = require('whatsapp-web.js');
 
 const Session = require('./models/WhtasSession')
@@ -12,8 +11,15 @@ const Citas = require('./models/Citas')
 
 //inicializacion
 const app = express()
-const http = require('http')
-const server = http.createServer(app)
+const http = require('http').Server(app)
+const io = require('socket.io')(http,  {
+    cors: {
+      origin: ["https://salon-app-109a8.web.app", "http://localhost:3000" , "https://salon-app-109a8.web.app/conexion", ],
+      methods: ["GET", "POST"],
+      credentials: true
+    }
+  })
+
 require('./config/database')
 
 //middlewares
@@ -31,14 +37,6 @@ app.use('/api/v1/servicios', require('./routes/servicios'))
 app.use('/api/v1/notificaciones', require('./routes/notificaciones'))
 
 
-const io = socketIo(server, {
-    cors: {
-      origin: ["https://salon-app-109a8.web.app", "http://localhost:3000" , "https://salon-app-109a8.web.app/conexion", ],
-      methods: ["GET", "POST"],
-      credentials: true
-    }
-  })
-
 
 io.on('connection', socket => {
     console.log('Socket connected: ', socket.id)
@@ -47,7 +45,7 @@ io.on('connection', socket => {
 
 
 //servidor
-server.listen(port, (err) => {
+http.listen(port, (err) => {
     if(err){
         console.log(`Error de conexion: ${err}`)
     }else{
@@ -71,7 +69,10 @@ let client
 
 app.post('/api/v1/conexion', async (req, res) => {
     const salon = req.body.salon
+    console.log(salon)
     const session = await Session.findOne({ salon: salon })
+   
+    console.log(session)
     
     if(!session){
         client = new Client();
