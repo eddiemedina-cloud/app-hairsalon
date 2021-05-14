@@ -120,8 +120,6 @@ app.post('/api/v1/conexion', async (req, res) => {
 app.post('/api/v1/confirm', async ( req, res ) => {
 
     try{
-        await client.sendMessage(`502${req.body.telefono}@c.us`, 
-        `Tu cita ha sido confirmada, te esperamos el dia ${req.body.fecha} en la siguiente hora: ${req.body.hora}`)
         await Citas.findOneAndUpdate({ _id: req.body.id }, {
             confirmacion : true
         })
